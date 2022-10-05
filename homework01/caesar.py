@@ -19,7 +19,9 @@ def encrypt_caesar(plaintext: str, shift: int = 3) -> str:
     for i in plaintext:
         if i.isalpha():
             curr = ord(i) + shift
-            if curr > ord("Z" if i.isupper() else "z"):
+            if i.isupper() and curr > ord("Z"):
+                curr -= 26
+            if i.islower() and curr > ord("z"):
                 curr -= 26
             ciphertext += chr(curr)
         else:
@@ -45,13 +47,22 @@ def decrypt_caesar(ciphertext: str, shift: int = 3) -> str:
     for i in ciphertext:
         if i.isalpha():
             curr = ord(i) - shift
-            if curr < ord("A" if i.isupper() else "a"):
+            if i.isupper() and curr < ord("A"):
+                curr += 26
+            if i.islower() and curr < ord("a"):
                 curr += 26
             plaintext += chr(curr)
         else:
             plaintext += i
+
     return plaintext
 
 
-
+def caesar_breaker_brute_force(ciphertext: str, dictionary: tp.Set[str]) -> int:
+    """
+    Brute force breaking a Caesar cipher.
+    """
+    best_shift = 0
+    # PUT YOUR CODE HERE
+    return best_shift
 
