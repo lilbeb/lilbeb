@@ -14,20 +14,26 @@ def encrypt_vigenere(plaintext: str, keyword: str) -> str:
     """
     ciphertext = ""
 
-    ind = 0
-    for i in plaintext:
-        if i.islower():
-            cur = ord(keyword[ind]) - ord("a")
-            enc = chr((ord(i) - ord("a") + cur) % 26 + ord("a"))
-            ciphertext += enc
-            ind = (ind + 1) % len(keyword)
-        elif i.isupper():
-            cur = ord(keyword[ind]) - ord("A")
-            enc = chr((ord(i) - ord("A") + cur) % 26 + ord("A"))
-            ciphertext += enc
-            ind = (ind + 1) % len(keyword)
+    for i in range(0, len(plaintext)):
+        curr = ord(plaintext[i])
+        if len(keyword) <= i:
+            tab = ord(keyword[i - len(keyword) * (i // len(keyword))])
+            if ord("A") <= tab <= ord("Z"):
+                tab = tab - ord("A")
+            elif ord("a") <= tab <= ord("z"):
+                tab -= ord("a")
         else:
-            ciphertext += i
+            tab = ord(keyword[i])
+            if ord("A") <= tab <= ord("Z"):
+                tab -= ord("A")
+            elif ord("a") <= tab <= ord("z"):
+                tab -= ord("a")
+        if ord("A") <= curr <= ord("Z"):
+            ciphertext += chr(((curr - ord("A") + tab) % 26) + ord("A"))
+        elif ord("a") <= curr <= ord("z"):
+            ciphertext += chr(((curr - ord("a") + tab) % 26) + ord("a"))
+        else:
+            ciphertext += plaintext[i]
 
     return ciphertext
 
@@ -45,29 +51,25 @@ def decrypt_vigenere(ciphertext: str, keyword: str) -> str:
     """
     plaintext = ""
 
-    ind = 0
-
-    for i in ciphertext:
-        if i.islower():
-            cur = ord(keyword[ind]) - ord("a")
-            dec = ord(i) - ord("a") - cur
-            if dec < 0:
-                dec += 26
-
-            decc = chr(dec + ord("a"))
-            plaintext += decc
-            ind = (ind + 1) % len(keyword)
-
-        elif i.isupper():
-            cur = ord(keyword[ind]) - ord("A")
-            dec = ord(i) - ord("A") - cur
-            if dec < 0:
-                dec += 26
-
-            decc = chr(dec + ord("A"))
-            plaintext += decc
-            ind = (ind + 1) % len(keyword)
+    for i in range(0, len(ciphertext)):
+        curr = ord(ciphertext[i])
+        if len(keyword) <= i:
+            tab = ord(keyword[i - len(keyword) * (i // len(keyword))])
+            if ord("A") <= tab <= ord("Z"):
+                tab -= ord("A")
+            elif ord("a") <= tab <= ord("z"):
+                tab -= ord("a")
         else:
-            plaintext += i
+            tab = ord(keyword[i])
+            if ord("A") <= tab <= ord("Z"):
+                tab -= ord("A")
+            elif ord("a") <= tab <= ord("z"):
+                tab -= ord("a")
+        if ord("A") <= curr <= ord("Z"):
+            plaintext += chr(((curr - ord("A") - tab) % 26) + ord("A"))
+        elif ord("a") <= curr <= ord("z"):
+            plaintext += chr(((curr - ord("a") - tab) % 26) + ord("a"))
+        else:
+            plaintext += ciphertext[i]
 
     return plaintext
