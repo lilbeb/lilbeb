@@ -54,14 +54,12 @@ def get_col(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str
 
 
 def get_block(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.List[str]:
-    (row, col) = pos
-    line = (row // 3) * 3
-    cl = (col // 3) * 3
-    arr = []
-    for i in range(line, line + 3):
-        for j in range(cl, cl + 3):
-            arr += [grid[i][j]]
-    return arr
+    row, col = (pos[0] // 3) * 3, (pos[1] // 3) * 3
+    res = []
+    for i in range(row, row + 3):
+        for j in range(col, col + 3):
+            res.append(grid[i][j])
+    return res
 
 
 def find_empty_positions(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[int, int]]:
