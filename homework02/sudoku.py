@@ -71,9 +71,7 @@ def find_empty_positions(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.Tuple[in
     return None
 
 
-
 def find_possible_values(grid: tp.List[tp.List[str]], pos: tp.Tuple[int, int]) -> tp.Set[str]:
-
     lot = set(str(i) for i in range(1, 10))
     row = get_row(grid, pos)
     col = get_col(grid, pos)
@@ -101,6 +99,7 @@ def solve(grid: tp.List[tp.List[str]]) -> tp.Optional[tp.List[tp.List[str]]]:
             grid[row][col] = "."
         return None
 
+
 def check_solution(solution: tp.List[tp.List[str]]) -> bool:
     # TODO: Add doctests with bad puzzles
     lot = set("123456789")
@@ -121,7 +120,6 @@ def check_solution(solution: tp.List[tp.List[str]]) -> bool:
 
 
 def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
-
     empt = [["." for i in range(9)] for j in range(9)]
     grid = solve(empt)
     if grid is None:
