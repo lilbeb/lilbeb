@@ -221,11 +221,12 @@ def generate_sudoku(N: int) -> tp.List[tp.List[str]]:
     for i in range(place):
         row = randint(0, 8)
         col = randint(0, 8)
-        while grid[row][col] == "."
+        while grid[row][col] == ".":
             row = randint(0, 8)
             col = randint(0, 8)
         grid[row][col] = "."
     return grid
+
 
 if __name__ == "__main__":
     for fname in ["puzzle1.txt", "puzzle2.txt", "puzzle3.txt"]:
