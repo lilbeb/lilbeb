@@ -36,7 +36,7 @@ def group(values: tp.List[T], n: int) -> tp.List[tp.List[T]]:
     matrix = []
     for i in range(len(values) // n):
         line = []
-        line += values[i * n: n * (i + 1)]
+        line += values[i * n : n * (i + 1)]
         matrix.append(line)
     return matrix
 
