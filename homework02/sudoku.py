@@ -46,7 +46,7 @@ def group(values: tp.List[T], n: int) -> tp.List[tp.List[T]]:
     matrix = []
     for i in range(len(values) // n):
         line = []
-        line += values[i * n: n * (i + 1)]
+        line += values[i * n : n * (i + 1)]
         matrix.append(line)
     return matrix
 
@@ -175,9 +175,9 @@ def check_solution(solution: tp.List[tp.List[str]]) -> bool:
         for j in range(len(solution)):
             pos = (i, j)
             if (
-                    get_col(solution, pos).count(solution[i][j]) != 1
-                    or get_row(solution, pos).count(solution[i][j]) != 1
-                    or get_block(solution, pos).count(solution[i][j]) != 1
+                get_col(solution, pos).count(solution[i][j]) != 1
+                or get_row(solution, pos).count(solution[i][j]) != 1
+                or get_block(solution, pos).count(solution[i][j]) != 1
             ):
                 return False
     return True
