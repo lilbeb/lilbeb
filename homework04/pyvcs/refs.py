@@ -3,48 +3,41 @@ import typing as tp
 
 
 def update_ref(gitdir: pathlib.Path, ref: tp.Union[str, pathlib.Path], new_value: str) -> None:
-    path = gitdir / pathlib.Path(ref)
-    with open(path, "w") as file:
-        file.write(new_value)
+    refpath = gitdir / pathlib.Path(ref)
+    with refpath.open("w") as f:
+        f.write(new_value)
 
 
 def symbolic_ref(gitdir: pathlib.Path, name: str, ref: str) -> None:
-    if ref_resolve(gitdir, ref):
-        path = gitdir / name
-        with open(path, "w") as file:
-            file.write(f"ref: {ref}")
+    if ref_resolve(gitdir, ref) is None:
+        return None
+    with (gitdir / name).open("w") as f:
+        f.write(f"ref: {ref}")
 
 
-def ref_resolve(gitdir: pathlib.Path, refname: str) -> str:
+def ref_resolve(gitdir: pathlib.Path, refname: str) -> tp.Optional[str]:
     if refname == "HEAD":
         refname = get_ref(gitdir)
-    path = gitdir / refname
-    if path.exists():
-        with open(path, "r") as f:
-            return f.read()
-    else:
-        return refname
+    if not (gitdir / refname).exists():
+        return None
+    with open((gitdir / refname), "r") as f:
+        out = f.read()
+    return out
 
 
 def resolve_head(gitdir: pathlib.Path) -> tp.Optional[str]:
-    path = gitdir / get_ref(gitdir)
-    if path.exists():
-        return ref_resolve(gitdir, "HEAD")
-    else:
-        return None
+    return ref_resolve(gitdir, "HEAD")
 
 
 def is_detached(gitdir: pathlib.Path) -> bool:
-    path = gitdir / "HEAD"
-    with open(path, "r") as f:
-        data = str(f.read())
-    if "ref" not in data:
+    with (gitdir / "HEAD").open("r") as f:
+        chref = str(f.read())
+    if chref.find("ref") == -1:
         return True
-    else:
-        return False
+    return False
 
 
 def get_ref(gitdir: pathlib.Path) -> str:
     with open((gitdir / "HEAD"), "r") as f:
-        data = f.read()
-    return data[data.find(" ") + 1 :].strip()
+        gref = f.read()
+    return gref[gref.find(" ") + 1 :].strip()
