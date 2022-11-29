@@ -18,6 +18,7 @@ def commit(gitdir: pathlib.Path, message: str, author: tp.Optional[str] = None) 
     return commit_tree(gitdir, write_tree(gitdir, ind), message, author)
 
 
+
 def checkout(gitdir: pathlib.Path, obj_name: str) -> None:
     file = gitdir / "refs" / "heads" / obj_name
     if file.exists():
