@@ -1,25 +1,33 @@
 import os
 import pathlib
-import stat
-import time
 import typing as tp
 
-from pyvcs.index import GitIndexEntry, read_index
-from pyvcs.objects import hash_object
-from pyvcs.refs import get_ref, is_detached, resolve_head, update_ref
+
+def repo_find(workdir: tp.Union[str, pathlib.Path] = ".") -> pathlib.Path:
+    gitdir = os.getenv("GIT_DIR", ".git")
+    cur = pathlib.Path(workdir)
+    path = cur / gitdir
+    if path.exists():
+        return path
+    for directory in path.parents:
+        if directory.name == gitdir:
+            return directory
+    raise Exception("Not a git repository")
 
 
-def write_tree(gitdir: pathlib.Path, index: tp.List[GitIndexEntry], dirname: str = "") -> str:
-    # PUT YOUR CODE HERE
-    ...
+def repo_create(workdir: tp.Union[str, pathlib.Path]) -> pathlib.Path:
+    workdir = pathlib.Path(workdir)
+    if not workdir.is_dir():
+        raise Exception(f"{workdir.name} is not a directory")
+    gitdir = os.getenv("GIT_DIR", ".git")
+    os.makedirs(workdir / gitdir / "refs" / "tags")
+    os.makedirs(workdir / gitdir / "objects")
+    os.makedirs(workdir / gitdir / "refs" / "heads")
 
-
-def commit_tree(
-    gitdir: pathlib.Path,
-    tree: str,
-    message: str,
-    parent: tp.Optional[str] = None,
-    author: tp.Optional[str] = None,
-) -> str:
-    # PUT YOUR CODE HERE
-    ...
+    (workdir / gitdir / "HEAD").write_text("ref: refs/heads/master\n")
+    (workdir / gitdir / "config").write_text(
+        "[core]\n\trepositoryformatversion = 0\n\tfilemode = true"
+        "\n\tbare = false\n\tlogallrefupdates = false\n"
+    )
+    (workdir / gitdir / "description").write_text("Unnamed pyvcs repository.\n")
+    return workdir / gitdir
