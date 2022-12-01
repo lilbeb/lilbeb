@@ -1,19 +1,20 @@
 import datetime as dt
 import typing as tp
+
 from vkapi.friends import get_friends
 
 
 def age_predict(user_id: int) -> tp.Optional[float]:
-    friend = get_friends(user_id).items
-    age_now = dt.datetime.now().year
-    t = 0
-    age = 0
-    for i in friend:
+    am = 0
+    summ = 0
+    friends = get_friends(user_id).items
+    currage = dt.datetime.now().year
+    for i in friends:
         try:
-            age += int(age_now - int(i["bdate"][5:]))
-            t += 1
+            summ += int(currage - int(i["bdate"][5:]))
+            am += 1
         except:
             pass
-    if t > 0:
-        return age // t
+    if am > 0:
+        return summ // am
     return None
